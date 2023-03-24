@@ -1,0 +1,42 @@
+﻿@page
+@model WeatherApp.Pages.IndexModel
+@{
+    ViewData["Title"] = "WeatherApp";
+}
+
+<h1>Weather Forecast</h1>
+<form method="get">
+    <label for="woeid">Enter a WOEID:</label>
+    <input type="text" id="woeid" name="woeid" />
+    <button type="submit">Get Weather</button>
+</form>
+@if (Model.ConsolidatedWeather != null && Model.ConsolidatedWeather.Count > 0)
+{
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Weather</th>
+            <th>Temperature</th>
+            <th>Humidity</th>
+            <th>Wind Speed</th>
+        </tr>
+        @foreach (var weather in Model.ConsolidatedWeather)
+        {
+            <tr>
+                <td>@DateTime.Parse(weather.ApplicableDate).ToShortDateString()</td>
+                <td>@weather.WeatherStateName</td>
+                <td>@weather.TheTemp</td>
+                <td>@weather.Humidity</td>
+                <td>@weather.WindSpeed</td>
+            </tr>
+        }
+    </table>
+}
+else if (!string.IsNullOrEmpty(Request.Query["woeid"]))
+{
+    <p>Unable to retrieve weather forecast for WOEID @Request.Query["woeid"].ToString().</p>
+}
+else
+{
+    <p>Enter a WOEID to get the weather forecast.</p>
+}
